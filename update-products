@@ -9,3 +9,4 @@ if [[ ! -f '.deps-installed' ]]; then
 	touch .deps-installed
 fi
 python3 update-products.py
+deactivate
