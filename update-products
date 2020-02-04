@@ -1,0 +1,11 @@
+#!/bin/bash
+if [[ ! -d './env' ]]; then
+	python3 -m venv env
+fi
+
+source env/bin/activate
+if [[ ! -f '.deps-installed' ]]; then
+	pip install -r requirements.txt
+	touch .deps-installed
+fi
+python3 update-products.py

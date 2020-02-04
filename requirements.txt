@@ -1,0 +1,3 @@
+pyyaml
+yaspin
+PyInquirer
