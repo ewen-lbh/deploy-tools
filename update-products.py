@@ -17,7 +17,7 @@ def main():
   for product in iterate_products(templates, products):
     update_project(**product)
 
-  for step_name, command in iterate_steps(before):
+  for step_name, command in iterate_steps(after):
     do_step(step_name, command, show=options['show stdout']['after'])
 
 def load_yaml_file():
