@@ -1,4 +1,6 @@
 #!/bin/bash
+cwd=$(pwd)
+cd ~/deploy-tools
 if [[ ! -d './env' ]]; then
 	python3 -m venv env
 fi
@@ -10,3 +12,4 @@ if [[ ! -f '.deps-installed' ]]; then
 fi
 python3 update-products.py
 deactivate
+cd $cwd
