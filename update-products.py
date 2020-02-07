@@ -162,10 +162,10 @@ def restart(pm2_app):
 
 def update(steps):
   for spinner_text, command in iterate_steps(steps):
-    do_step(spinner_text+'...', command)
+    do_step(spinner_text, command)
 
 def do_step(text, command, **opts):
-  @yaspin(text=text)
+  @yaspin(text=text+'...')
   def doit():
     shell(command, **opts)
   doit()
