@@ -87,7 +87,7 @@ def update_project(
   steps: List[Tuple[str, str, Optional[Dict]]]
 ):
   ## Print a header
-  cprint('\n\n' + (verbose_name or pm2 or dir).upper() + '\n\n', attrs=['bold'])
+  cprint('\n\n' + (verbose_name or pm2 or dir).upper() + '\n\n', 'yellow', attrs=['bold'])
   ## Create the dir & clone if it doesnt exist
   if not os.path.isdir(dir):
     if prompt([{
