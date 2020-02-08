@@ -154,7 +154,8 @@ class working_dir:
 
 @yaspin(text="Checking for updates...", color="cyan")
 def is_up_to_date():
-  stdout = shell('git log HEAD..origin/master --oneline').stdout
+  shell('sudo git fetch')
+  stdout = shell('git --no-pager log HEAD..origin/master --oneline').stdout
   uptodate = stdout == b''
   return uptodate
 
