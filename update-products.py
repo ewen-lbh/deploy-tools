@@ -102,10 +102,12 @@ def update_project(
     ## Get choices (if the app is not managed by pm2, we can't show the "Just restart the app" option)
     what_to_do_choices = [
       'Nothing',
-      Separator(),
       'Do as if it was not up to date',
+      Separator(),
     ]
     if pm2: what_to_do_choices.append('Just restart the app')
+    for step_name, _ in iterate_steps(steps):
+      what_to_do_choices.append(step_name)
     what_to_do = ''
     ## If the repo is up to date, ask what to do
     if uptodate:
@@ -125,7 +127,10 @@ def update_project(
       git_pull()
       print('√ Pulled.')
     ## Do the steps
-    if not uptodate or what_to_do == 'Do as if it was not up to date':
+    if uptodate and what_to_do in [s[0] for s in iterate_steps(steps)]:
+      for step_name, command in iterate_steps(steps):
+        do_step(step_name, command)
+    elif not uptodate or what_to_do == 'Do as if it was not up to date':
       update(steps)
     ## Restart (if the app is managed by pm2)
     if pm2:
