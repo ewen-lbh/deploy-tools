@@ -4,9 +4,12 @@ from time import sleep as wait
 from time import time as timestamp
 from yaspin import yaspin
 import yaml
+from termcolor import cprint, colored
 from subprocess import run
 from PyInquirer import prompt, Separator
 from typing import List, Tuple, Dict, Optional, Callable
+
+CHECKMARK = colored("√", 'green')
 
 def main():
   templates, products, options, before, after = load_yaml_file()
@@ -84,7 +87,7 @@ def update_project(
   steps: List[Tuple[str, str, Optional[Dict]]]
 ):
   ## Print a header
-  print('   ', (verbose_name or pm2 or dir).upper())
+  cprint('\n\n' + (verbose_name or pm2 or dir).upper() + '\n\n', attrs=['bold'])
   ## Create the dir & clone if it doesnt exist
   if not os.path.isdir(dir):
     if prompt([{
@@ -125,7 +128,7 @@ def update_project(
     ## Pull from origin
     if not uptodate:
       git_pull()
-      print('√ Pulled.')
+      print(CHECKMARK + ' Pulled.')
     ## Do the steps
     if uptodate and what_to_do in [s[0] for s in iterate_steps(steps)]:
       for step_name, command in iterate_steps(steps):
@@ -135,7 +138,7 @@ def update_project(
     ## Restart (if the app is managed by pm2)
     if pm2:
       restart(pm2)
-      print('√ Restarted.')
+      print(CHECKMARK + ' Restarted.')
 
 
 class working_dir:
@@ -144,25 +147,27 @@ class working_dir:
     self.cwd = os.getcwd()
   def __enter__(self):
     os.chdir(self.path)
+    cprint(f"Now at {os.getcwd()}", attrs=['dark'])
   def __exit__(self, type, value, traceback):
     os.chdir(self.cwd)
+    cprint(f"Now at {os.getcwd()}", attrs=['dark'])
 
-@yaspin(text="Checking for updates...")
+@yaspin(text="Checking for updates...", color="cyan")
 def is_up_to_date():
   stdout = shell('git log HEAD..origin/master --oneline').stdout
   uptodate = stdout == b''
   return uptodate
 
-@yaspin(text="Pulling from origin...")
+@yaspin(text="Pulling from origin...", color="cyan")
 def git_pull():
   shell('git pull')
   # print("Done.")
 
-@yaspin(text="Cloning repository...")
+@yaspin(text="Cloning repository...", color="cyan")
 def git_clone(git_clone_url, dir_name):
   shell(f'git clone {git_clone_url} {dir_name}')
 
-@yaspin(text="Restarting...")
+@yaspin(text="Restarting...", color="cyan")
 def restart(pm2_app):
   shell(f'pm2 restart {pm2_app}')
 
@@ -171,11 +176,11 @@ def update(steps):
     do_step(spinner_text, command)
 
 def do_step(text, command, **opts):
-  @yaspin(text=text+'...')
+  @yaspin(text=text+'...', color='cyan')
   def doit():
     shell(command, **opts)
   doit()
-  print("√ " + _word_being_to_preterit(text, 'Done') + '.')
+  print(CHECKMARK + ' ' + _word_being_to_preterit(text, 'Done') + '.')
 
 def iterate_steps(steps):
   for step in steps:
