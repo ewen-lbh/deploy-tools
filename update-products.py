@@ -149,7 +149,8 @@ class working_dir:
 
 @yaspin(text="Checking for updates...")
 def is_up_to_date():
-  uptodate = shell('git log HEAD..origin/master --oneline', show=True).stdout == ''
+  stdout = shell('git log HEAD..origin/master --oneline').stdout
+  uptodate = stdout == b''
   return uptodate
 
 @yaspin(text="Pulling from origin...")
