@@ -207,7 +207,8 @@ def _word_being_to_preterit(text: str, fallback: str):
     'Extracting': 'Extracted',
     'Restarting': 'Restarted',
     'Reloading': 'Reloaded',
-    'Launching': 'Launched'
+    'Launching': 'Launched',
+    'Applying': 'Applied'
   }
   for (being, preterit) in REPLACE_MAP.items():
     if being in text.split(' '):
